@@ -49,8 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function validarCampo(e){
         //validar que el campo es requerido
 
-
-
         if (e.target.required && !e.target.value.trim() ) {
             mostrarAlerta(`El campo ${e.target.id} es obligatorio`, e.target.parentElement);
             email[e.target.id] = '';
@@ -65,12 +63,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        if(e.target.id === 'ccemail' && !validarEmail(e.target.value)){
-            console.log('ccemail');
-            mostrarAlerta(`El campo ${e.target.id} no es válido`, e.target.parentElement);
-            email[e.target.id] = '';
-            comprobarEmail();
-            return;
+        if(e.target.id === 'ccemail' && e.target.value.trim() !== '' ) {
+            if(!validarEmail(e.target.value)) {
+                mostrarAlerta(`El campo ${e.target.id} no es válido`, e.target.parentElement);
+                comprobarEmail();
+                return;
+            }
         }
 
         limpiarAlerta(e.target.parentElement);
@@ -100,6 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function validarEmail(inputEmail) {
+        if (!inputEmail) return false;
+        
         const email = inputEmail;
         const expresion = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/ ;
         const resultado = expresion.test(email);
@@ -110,8 +110,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if(Object.values(email).includes('')){
             btnSubmit.classList.add('opacity-50');
             btnSubmit.disabled = true;
-
-        } else {
+        } 
+        else if (Object.values(email).includes('')){
+            btnSubmit.classList.add('opacity-50');
+            btnSubmit.disabled = false;
+        }
+        else {
             btnSubmit.classList.remove('opacity-50');
             btnSubmit.disabled = false;
         }
